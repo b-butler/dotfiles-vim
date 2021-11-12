@@ -1,0 +1,123 @@
+snippet slide "add slide" wbm
+<section> <!-- ${1:short description} -->
+	<div class="r-stretch">
+		<h${2:2}>${3:title}</h$2>
+		<div class="$4">
+			$5
+		</div>
+		<footer>
+			<img src="./figures/umich-logo.png" alt="Image not found."/>
+			<p>The Glotzer Group</p>
+		</footer>
+	</div>
+</section>
+$0
+endsnippet
+
+snippet slide. "add slide" wbm
+<section $1> <!-- ${2:short description} -->
+	<h${3:2}>${4:title}</h$3>
+	<div class="r-stretch $4">
+		$5
+	</div>
+</section>
+$0
+endsnippet
+
+snippet title "add title slide" wbm
+<section> <!-- Title -->
+	<h${1:2}>${2:title}</h$1>
+	<br/>
+	<h${3:3}>${4:date}</h$3>
+	<h${5:3}>${6:author}</h$5>
+</section>
+$0
+endsnippet
+
+snippet col2 "add columns" wm
+<div class="columns">
+	<div class="col-$1">
+		$2
+	</div>
+	<div class="col-$3">
+		$4
+	</div>
+</div>
+endsnippet
+
+snippet col2. "add columns" wm
+<div class="columns $1" $2>
+	<div class="col-$3">
+		$5
+	</div>
+	<div class="col-$4">
+		$6
+	</div>
+</div>
+$0
+endsnippet
+
+snippet notes "add notes for slide" wm
+<aside class="notes">
+	$1
+</aside>$0
+endsnippet
+
+global !p
+def generate_stack(snip):
+	inner_tag, number = re.split(
+		'(\d+)', snip.buffer[snip.line].strip()[5:])[:2]
+	snip.buffer[snip.line] = ''
+	number = int(number)
+	new_snip = '<div class="r-stack">\n'
+	if len(inner_tag) > 0:
+		start_tag = '<' + inner_tag
+		start_tag += ' class="fragment" {} {}>'
+		end_tag = '</' + inner_tag + '>'
+		complete_tag = start_tag.format("", "current-visible") + "${{{}}}" + end_tag
+		for num in range(1, min(3, number + 1)):
+			new_snip += '\t' + start_tag.format('data-fragement-index="0"')
+			new_snip += '${' + str(num) + '}' + end_tag + '\n'
+		for num in range(3, number + 1):
+			new_snip += '\t' + complete_tag.format(num) + '\n'
+	else:
+		new_snip += '${1}'
+	new_snip += '</div>$0'
+	snip.expand_anon(new_snip)
+endglobal
+
+
+pre_expand "generate_stack(snip)"
+snippet "stack([a-z]*)(\d*)" "add a reveal.js stack" wbr
+endsnippet
+
+snippet ftr "add slide footer" wm
+<footer>
+	<img src="./figures/umich-eng-logo.png" alt="Image not found."/>
+	<p>The Glotzer Group</p>
+</footer>
+endsnippet
+
+snippet mk "inline math" wmA
+\( $1 \)
+endsnippet
+
+snippet eq "block math" wm
+\[
+	$1
+\]
+endsnippet
+
+snippet uncount "make slide uncounted" w
+data-visibility="uncounted"
+endsnippet
+
+snippet hide "make slide hidden" w
+data-visiblity="hidden"
+endsnippet
+
+snippet "fi(\d+)" "add slide animation (fragment) index" wr
+`!p
+snip.rv = f'data-fragment-index="{match.group(1)}"'
+`
+endsnippet

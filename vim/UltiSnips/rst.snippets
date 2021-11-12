@@ -1,0 +1,30 @@
+snippet cde "inline code" wA
+:code:\`$1\`$0
+endsnippet
+
+snippet mth "inline math" wA
+:math:\`$1\`$0
+endsnippet
+
+snippet cblock "code block" Ab
+.. code-block:: ${1:language}
+
+	$2
+$0
+endsnippet
+
+snippet eq "equation" b
+.. math::
+	:type: equation
+	
+	$1
+$0
+endsnippet
+
+snippet mblock "math block" b
+.. :math:
+	:type: $1
+
+	$2
+$0
+endsnippet

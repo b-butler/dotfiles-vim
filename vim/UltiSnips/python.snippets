@@ -1,0 +1,40 @@
+# Insert snippets for python
+
+snippet ifelse "if statement with else"
+if ${1:condtion} :
+	2:pass}
+else:
+	3:pass}
+endsnippet
+
+snippet elif "if statement with else if"
+if ${1:condtion}:
+	2:pass}
+else if ${3:condtion}:
+	4:pass}
+${5:else:
+    ${0:pass}}
+endsnippet
+
+snippet while "simple while loop"
+while ${1:condition}:
+	${0:pass}
+endsnippet
+
+snippet clsmthd "add class method"
+@classmethod
+def ${1:method}(cls${2}):
+	${0:pass}
+endsnippet
+
+snippet stcmthd "add static method"
+@staticmethod
+def ${1:method}(${2}):
+	${0:pass}
+endsnippet
+
+snippet prop "add property"
+@property
+def ${1:name}(self):
+	${0:return self._${1}}
+endsnippet

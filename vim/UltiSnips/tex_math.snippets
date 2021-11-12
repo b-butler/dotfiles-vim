@@ -1,0 +1,254 @@
+# Snippets for LaTeX math modes
+
+# Snippets for entering math modes -------------- {{{
+# Inline Math ------------------------- {{{
+priority 3
+snippet mk "Inline Math Mode" wA
+$${1}$`!p
+if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
+    snip.rv = ' '
+else:
+    snip.rv = ''
+`$2
+endsnippet
+# }}}
+priority 0
+
+# Displayed Math Modes -------------------- {{{
+snippet eq "create equation environment" bA
+\begin{equation${1:*}}
+	$0
+\end{equation$1}
+endsnippet
+
+snippet algn "insert align environment" bA
+\begin{align${1:*}}
+	$0
+\end{align$1}
+endsnippet
+# }}}
+# }}}
+
+# Sequences ------------------ {{{
+priority 1
+snippet ssum "summation" wA
+\sum`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '_{'
+else:
+    snip.rv = ''
+`${1:f}`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv += '^{'
+`${2:t}`!p
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+`{${3:arg}}
+endsnippet
+priority 0
+
+snippet iint "integral" wA
+\int`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '_{'
+else:
+    snip.rv = ''
+`${1:f}`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv += '^{'
+`${2:t}`!p
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+`{${3:arg}}
+endsnippet
+
+snippet pprod "product" wA
+\prod`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '_{'
+else:
+    snip.rv = ''
+`${1:f}`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv += '^{'
+`${2:t}`!p
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+`{${3:arg}}
+endsnippet
+# }}}
+
+# Auto Sub/Super-Scripting ----------------------{{{
+# subscripting ---------------------------- {{{
+
+# Subscripting Latin variables
+priority 0
+snippet '([A-Za-z]{1,2})(\d)' "auto subscript" rw
+`!p snip.rv = match.group(1) + "_"
+if t[1] and t[1][0] not in " \t\n.{}[]()^p":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()^p":
+    snip.rv = '}'`
+>>>>>>> Wiki updates, latex math snippets update.
+endsnippet
+
+# Subscripting from special letters
+priority 1
+snippet '(\\[A-Za-z]+)(\d)' "auto subscript" rw
+`!p snip.rv = match.group(1) + "_"
+if t[1] and t[1][0] not in " \t\n.{}[]()^p":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()^p":
+    snip.rv = '}'`
+endsnippet
+
+# Allow for tab completion and autobracketing of common sequence variables
+priority 0
+snippet '([A-Za-z])([i-n])' "auto subscript" rw
+`!p snip.rv = match.group(1) + "_"
+if t[1] and t[1][0] not in " \t\n.{}[]()^p":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()^p":
+    snip.rv = '}'`
+endsnippet
+
+# Subscript from parenthesis and brackets
+snippet '([\)\]\}])([\di-n])' "auto subscript" rw
+`!p snip.rv = match.group(1) + "_"
+if t[1] and t[1][0] not in " \t\n.{}[]()^p":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()^p":
+    snip.rv = '}'`
+endsnippet
+
+# priority 1
+# # Add brackets automatically
+# snippet '_([^\{\s\.\(\[]{2,})' "auto bracket subscript" rwA
+# _{`!p snip.rv = match.group(1)`$1}
+# endsnippet
+# priority 0
+# }}}
+
+# Auto superscripting ----------------------- {{{
+# Ensure that in cases where subscript may be activated prefer superscript.
+priority 2 
+snippet '([^\s])pw([^\s])' "auto superscript" rw
+`!p snip.rv = match.group(1) + "^"
+if t[1] and t[1][0] not in " \t\n.{}[]()_":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()_":
+    snip.rv = '}'`
+endsnippet
+
+# For autoexpanding greek letters
+snippet '([^\s])pw(\\[A-Za-z]+)' "auto superscript" rw
+`!p snip.rv = match.group(1) + "^"
+if t[1] and t[1][0] not in " \t\n.{}[]()_":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()_":
+    snip.rv = '}'`
+endsnippet
+
+# Add brackets automatically
+# snippet '\^([^\{\},\]\)\.\s]{2,})' "auto bracket subscript" rwA
+# ^{`!p snip.rv = match.group(1)`$1}
+# endsnippet
+# }}}
+# }}}
+
+# Fractions -------------------- {{{
+priority 3
+snippet // "Fraction" iA
+\frac{$1}{$2}
+endsnippet
+
+priority 0
+snippet '(\d+)/' "Number Fraction" ri
+\frac{`!p snip.rv = match.group(1)`}{$1}
+endsnippet
+
+# Fraction must end without brackets or powers
+priority 1
+snippet '([^\s,\.]*(\d|\\[a-zA-Z]+))/' "Complicated Fraction" ri
+\frac{`!p snip.rv = match.group(1)`}{$1}
+endsnippet
+# }}}
+
+# Vector, Bar, etc. ------------------------ {{{
+# Bar
+snippet '([^\s]{1,2})bar' "Post fix bar" ri
+\overline{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Vector
+snippet '([^\s]{1,2})vec' "Post fix vector" ri
+\vec{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Dot
+snippet '([^\s\d,.]{1,2})dot' "Post fix dot" ri
+\dot{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Hat
+snippet '([^\s\d\.,]{1,2})hat' "Post fix hat" ri
+\hat{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# For special characters
+# Bar
+snippet '(\\[A-Za-z]+)bar' "Post fix bar" ri
+\overline{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Vector
+snippet '(\\[A-Za-z]+)vec' "Post fix vec" ri
+\vec{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Hat
+snippet '(\\[A-Za-z]+)hat' "Post fix hat" ri
+\hat{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Dot
+snippet '(\\[A-Za-z]+)dot' "Post fix dot" ri
+\dot{`!p snip.rv = match.group(1)`}
+endsnippet
+# }}}

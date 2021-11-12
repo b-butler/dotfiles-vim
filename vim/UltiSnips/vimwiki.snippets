@@ -1,0 +1,326 @@
+# Snippets for headings ---------------- {{{
+snippet h1 "heading 1" bA
+= ${1:Heading} =
+$0
+endsnippet
+
+snippet h2 "heading 2" bA
+== ${1:Heading} ==
+$0
+endsnippet
+
+snippet h3 "heading 3" bA
+=== ${1:Heading} ===
+$0
+endsnippet
+
+snippet h4 "heading 4" bA
+==== ${1:Heading} ====
+$0
+endsnippet
+
+snippet h5 "heading 5" bA
+===== ${1:Heading} =====
+$0
+endsnippet
+
+snippet h6 "heading 6" bA
+====== ${1:Heading} ======
+$0
+endsnippet
+
+# Headings with bars after
+snippet hb1 "heading 1" bA
+= ${1:heading} =
+------
+$0
+endsnippet
+
+snippet hb2 "heading 2" bA
+== ${1:heading} ==
+------
+$0
+endsnippet
+
+snippet hb3 "heading 3" bA
+=== ${1:heading} ===
+------
+$0
+endsnippet
+
+snippet hb4 "heading 4" bA
+==== ${1:heading} ====
+------
+$0
+endsnippet
+
+snippet hb5 "heading 5" bA
+===== ${1:heading} =====
+------
+$0
+endsnippet
+
+snippet hb6 "heading 6" bA
+====== ${1:heading} ======
+------
+$0
+endsnippet
+
+# Snippets for links and tags
+snippet [[# "interal tagged link" wA
+[[#`!p snip.rv = t[1].replace(' ','-').lower()
+`|${1:name}]]
+endsnippet
+
+snippet : "tag" w
+:${1:tag}: $0
+endsnippet
+
+# Snippets for vimwiki math modes ---------------- {{{
+
+# Snippets for entering math modes -------------- {{{
+# Inline Math ------------------------- {{{
+priority 3
+snippet mk "Inline Math Mode" wA
+$${1}$$2
+endsnippet
+# }}}
+priority 0
+
+# Displayed Math Modes -------------------- {{{
+snippet eq "create equation environment" bA
+{{$%equation${1:*}%
+	$0
+}}$
+endsnippet
+
+snippet algn "insert align environment" bA
+{{$%align${1:*}%
+	$0
+}}$
+endsnippet
+# }}}
+# }}}
+
+# Sequences ------------------ {{{
+snippet ssum "summation" wA
+\sum`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '_{'
+else:
+    snip.rv = ''
+`${1:f}`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv += '^{'
+`${2:t}`!p
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+`{${3:arg}}
+endsnippet
+
+snippet iint "integral" wA
+\int`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '_{'
+else:
+    snip.rv = ''
+`${1:f}`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv += '^{'
+`${2:t}`!p
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+`{${3:arg}}
+endsnippet
+
+snippet pprod "product" wA
+\prod`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '_{'
+else:
+    snip.rv = ''
+`${1:f}`!p
+if t[1] and t[1][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv += '^{'
+`${2:t}`!p
+if t[2] and t[2][0] not in "{} \t\n":
+    snip.rv = '}'
+else:
+    snip.rv = ''
+`{${3:arg}}
+endsnippet
+# }}}
+
+# Auto Sub/Super-Scripting ----------------------{{{
+# Autosubscripting ---------------------------- {{{
+
+# Subscripting Latin variables
+priority 0
+snippet '([A-Za-z]{1,2})(\d)' "auto subscript" rw
+`!p snip.rv = match.group(1) + "_"
+if t[1] and t[1][0] not in " \t\n.{}[]()^p":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()^p":
+    snip.rv = '}'`
+endsnippet
+
+# Subscripting from special letters
+priority 1
+snippet '(\\[A-Za-z]+)(\d)' "auto subscript" rw
+`!p snip.rv = match.group(1) + "_"
+if t[1] and t[1][0] not in " \t\n.{}[]()^p":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()^p":
+    snip.rv = '}'`
+endsnippet
+
+# Allow for tab completion and autobracketing of common sequence variables
+priority 0
+snippet '([A-Za-z])([i-n])' "auto subscript" rw
+`!p snip.rv = match.group(1) + "_"
+if t[1] and t[1][0] not in " \t\n.{}[]()^p":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()^p":
+    snip.rv = '}'`
+endsnippet
+
+# Subscript from parenthesis and brackets
+snippet '([\)\]\}])([\di-n])' "auto subscript" rw
+`!p snip.rv = match.group(1) + "_"
+if t[1] and t[1][0] not in " \t\n.{}[]()^p":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()^p":
+    snip.rv = '}'`
+endsnippet
+
+priority 1
+# Add brackets automatically
+snippet '_([^\{\s\.\(\[]{2,})' "auto bracket subscript" rw
+_{`!p snip.rv = match.group(1)`$1}
+endsnippet
+priority 0
+# }}}
+
+# Auto superscripting ----------------------- {{{
+# Ensure that in cases where subscript may be activated prefer superscript.
+priority 2 
+snippet '([^\s])pw([^\s])' "auto superscript" rwA
+`!p snip.rv = match.group(1) + "^"
+if t[1] and t[1][0] not in " \t\n.{}[]()_":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()_":
+    snip.rv = '}'`
+endsnippet
+
+# For autoexpanding greek letters
+snippet '([^\s])pw(\\[A-Za-z]+)' "auto superscript" rwA
+`!p snip.rv = match.group(1) + "^"
+if t[1] and t[1][0] not in " \t\n.{}[]()_":
+    snip.rv += '{' + match.group(2)
+else:
+    snip.rv += match.group(2)
+`${1: }`!p
+if t[1] and t[1][0] not in  " \t\n.{}[]()_":
+    snip.rv = '}'`
+endsnippet
+
+# Add brackets automatically
+# snippet '\^([^\{\},\]\)\.\s]{2,})' "auto bracket subscript" rwA
+# ^{`!p snip.rv = match.group(1)`$1}
+# endsnippet
+# }}}
+# }}}
+
+# Fractions -------------------- {{{
+priority 3
+snippet // "Fraction" iA
+\frac{$1}{$2}
+endsnippet
+
+priority 0
+snippet '(\d+)/' "Number Fraction" riA
+\frac{`!p snip.rv = match.group(1)`}{$1}
+endsnippet
+
+# Fraction must end without brackets or powers
+priority 1
+snippet '([^\s,\.]*(\d|\\[a-zA-Z]+))/' "Complicated Fraction" riA
+\frac{`!p snip.rv = match.group(1)`}{$1}
+endsnippet
+# }}}
+
+# Vector, Bar, etc. ------------------------ {{{
+# Bar
+snippet '([A-Za-z]{1,2})bar' "Post fix bar" riA
+\overline{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Vector
+snippet '([A-Za-z]{1,2})vec' "Post fix vector" riA
+\vec{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Dot
+# snippet '([^\s\dlc]{1,2})dot' "Post fix dot" riA
+# \dot{`!p snip.rv = match.group(1)`}
+# endsnippet
+
+# Hat
+snippet '([^\s\d\.,tw]{1,2})hat' "Post fix hat" riA
+\hat{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# For special characters
+# Bar
+snippet '(\\[A-Za-z]+)bar' "Post fix bar" riA
+\overline{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Vector
+snippet '(\\[A-Za-z]+)vec' "Post fix vec" riA
+\vec{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Hat
+snippet '(\\[A-Za-z]+)hat' "Post fix hat" riA
+\hat{`!p snip.rv = match.group(1)`}
+endsnippet
+
+# Dot
+# snippet '(\\[A-Za-z]+)dot' "Post fix dot" riA
+# \dot{`!p snip.rv = match.group(1)`}
+# endsnippet
+# }}}
+# }}}
+

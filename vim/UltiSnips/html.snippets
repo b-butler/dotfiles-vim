@@ -1,0 +1,71 @@
+snippet $ "inline math" wm
+\( $1 \) $0
+endsnippet
+
+snippet $$ "block math" wm
+\[
+	$1
+\]$0
+endsnippet
+
+snippet h1 "header level 1" w
+<h1>$1</h1>
+$0
+endsnippet
+
+snippet h2 "header level 2" w
+<h2>$1</h2>
+$0
+endsnippet
+
+snippet h3 "header level 3" w
+<h3>$1</h3>
+$0
+endsnippet
+
+snippet h4 "header level 4" w
+<h4>$1</h4>
+$0
+endsnippet
+
+snippet h5 "header level 5" w
+<h5>$1</h5>
+$0
+endsnippet
+
+snippet h6 "header level 6" w
+<h6>$1</h6>
+$0
+endsnippet
+
+snippet tr "table row" w
+<tr>
+	$1
+</tr>$0
+endsnippet
+
+snippet th "table header" w
+<th>$1</th>$0
+endsnippet
+
+snippet td "table data" w
+<td>$1</td>$0
+endsnippet
+
+snippet table "table" w
+<table>
+	<tr>
+		<th>$1</th>$2
+	</tr>
+	<tr>
+		<td>$3</td>$4
+</table>$0
+endsnippet
+
+snippet cls "add a class" w
+class="${1}"
+endsnippet
+
+snippet id "add an id" w
+id="${1}"
+endsnippet

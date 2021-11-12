@@ -1,0 +1,15 @@
+# the plugin files
+plugged
+# backup files
+*/*~
+*/.*~
+*~
+.*~
+# local file
+local
+# netrwhist
+.netrwhist
+# private configuration
+private.vim
+# binary spell files
+*.spl

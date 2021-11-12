@@ -1,0 +1,474 @@
+" author: Brandon Butler, Github (b-butler)
+
+" For crossplatform support
+call circumnavigate#exportSysEnv()
+
+"  Plugged Package Manager ----------------- {{{
+call plug#begin('~/.vim/plugged')
+"  ---------- Local only plugins {{{
+if circumnavigate#isLocal()
+    Plug 'vimwiki/vimwiki'
+    Plug 'rhysd/vim-grammarous'
+endif
+"  }}}
+if has('nvim')
+    " We automatically update the parsers when updating the package
+    " This package provides enhanced syntax support for a variety of languages
+    " greatly enhancing syntax highlighing, folding, and allows a variety of
+    " plugins that use the introspection of the tree-sitter library.
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate all'}
+    " We now install a helper plugin for the built in LSP for Neovim
+    Plug 'neovim/nvim-lspconfig'
+    " We use nvim-cmp a completion engine written in Lua that is highly
+    " configuratble and fast (as can be for a completion engine. This also
+    " supports the LSP built into Neovim 0.5 and greater.
+    Plug 'hrsh7th/nvim-cmp'
+    " nvim-cmp completion sources
+    Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+endif
+" ---------- All Environments Plugins {{{
+" Aligning for text documents
+Plug 'junegunn/vim-easy-align'
+
+" to get help files for vim-plug
+Plug 'junegunn/vim-plug'
+
+" Snippet managers
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+" Fuzzy file finder (works in bash/zsh too)
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+" Colorschemes
+Plug 'morhetz/gruvbox'
+Plug 'NLKNguyen/papercolor-theme'
+
+"Linter
+Plug 'w0rp/ale'
+
+"Comment helper
+Plug 'tpope/vim-commentary'
+
+"Github Manager
+Plug 'tpope/vim-fugitive'
+
+"{}()[] Helper
+Plug 'tpope/vim-surround'
+
+" Latex Plugin
+Plug 'lervag/vimtex'
+
+" TOML syntax and file detection plugin
+Plug 'cespare/vim-toml'
+
+" Editor Config for basic project settings
+Plug 'editorconfig/editorconfig-vim'
+
+" Pretty table support
+Plug 'dhruvasagar/vim-table-mode'
+
+"  }}}
+" Initialize plugin system
+call plug#end()
+" }}}
+
+" Basic Settings --------------------------- {{{
+
+" The matchit plugin makes the % command work better, but it is not backwards
+" compatible.
+" The ! means the package won't be loaded right away but when plugins are
+" loaded during initialization.
+" packadd! matchit
+
+let g:tex_flavor = "latex"  " assume LaTeX files by default
+set hidden " don't autodelete buffers when they have no active viewport
+set undofile " undotree storage between sessions
+set grepprg=rg\ --vimgrep " change the program that grep calls to ripgrep
+
+" Remote setting for clipboards to prevent Xserver connection
+if !circumnavigate#isLocal() && !has('nvim')
+    set clipboard=exclude:.*
+endif
+set hidden
+set grepprg=rg\ --vimgrep
+if has("nvim")
+    set inccommand=split
+endif
+
+if circumnavigate#isLocal()
+    let g:vimwiki_global_ext=0
+endif
+
+" Color Theme ----------------------------- {{{
+if has('termguicolors')
+    set termguicolors
+else
+    set t_Co=256
+endif
+set background=dark
+
+" Change the syntax highlight to desired package.
+let colorscheme_choice = "papercolor"  " choices include gruvbox, papercolor
+if colorscheme_choice == "papercolor"
+    colorscheme PaperColor
+elseif colorscheme_choice == "gruvbox"
+    let g:gruv_contrast_light = 'hard'
+    let g:gruv_contrast_dark = 'medium'
+    let g:gruvbox_italic = '1'
+    colorscheme gruvbox
+endif
+" }}}
+
+" Default text options ---------------------- {{{
+" Input basic appearance and behavior
+set textwidth=80
+set colorcolumn=81
+set numberwidth=3
+set shiftround
+setlocal expandtab
+setlocal shiftwidth=4
+setlocal softtabstop=4
+" }}}
+
+" ALE settings ----------------------------- {{{
+let g:ale_sign_column_always=1
+" }}}
+
+" Tree-sitter settings ------- {{{
+if has('nvim')
+    " Requires use of embedded lua interpreter for configuration. TODO: move to
+    " lua config file called from .vimrc.
+    lua << EOF
+    require'nvim-treesitter.configs'.setup {
+        indent = { enable = true },
+        incremental_selection = {
+            enable = true,
+            keymaps = {
+                init_selection = 'gnn',
+                node_incremental = 'grn',
+                snope_incremental = 'grc',
+                node_decremental = 'grm',
+            },
+        },
+    highlight = {
+        enable = true,
+        }
+    }
+EOF
+
+    set foldmethod=expr
+    set foldexpr=nvim_treesitter#foldexpr()
+endif
+" }}}
+
+" NVim-LSP Config settings ---- {{{
+if has('nvim')
+    lua << EOF
+    local nvim_lsp = require('lspconfig')
+
+    -- Set mappings
+    local on_attach = function(client, bufnr)
+    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+    local opts = { noremap = true, silent = true }
+
+    -- args: mode, mapping, command, options
+    buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    buf_set_keymap('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+    buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+    buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+    buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+    buf_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+    end
+
+    -- Set up individual servers
+    servers = { 'clangd', 'cmake', 'bashls', 'jedi_language_server' }
+
+    for _, lsp in ipairs(servers) do
+        nvim_lsp[lsp].setup {
+            on_attach = on_attach,
+        }
+    end
+
+EOF
+endif
+" }}}
+
+" NVim-cmp settings -------- {{{
+if has('nvim')
+lua <<EOF
+    local cmp = require'cmp'
+
+    cmp.setup{
+        sources = {
+            { name = 'ultisnips' },
+            { name = 'nvim_lsp' },
+            { name = 'buffer' },
+        },
+        mapping = {
+            ['<C-n>'] = cmp.mapping.select_next_item(),
+            ['<C-p>'] = cmp.mapping.select_prev_item(),
+            ['<C-J>'] = cmp.mapping.scroll_docs(4),
+            ['<C-K>'] = cmp.mapping.scroll_docs(-4),
+            ['<CR>'] = cmp.mapping.confirm(),
+        },
+        completion = {
+            keyword_length = 1,
+        },
+        documentation = {
+            maxwidth = '80',
+            maxheight = '15',
+            winhighlight = '',
+        },
+    }
+EOF
+endif
+"
+
+" Vimtex Settings ------------------------- {{{
+let g:tex_flavor='latex'
+let g:tex_conceal='abmgs'
+let g:vimtex_latexmk_continuous=1
+let g:vimtex_fold_enabled=1
+let g:vimtex_imaps_leader=';'
+let g:vimtex_compiler_latexmk = {'options' : ['-verbose', '-file-line-error']}
+let g:vimtex_compiler_latexmk.options += ['-synctex=1', '-interaction=nonstopmode']
+let g:vimtex_compiler_latexmk.options += ['-pdf']
+" }}}
+
+" Adding QuickFix populating grep commands ------ {{{
+command! -nargs=1 -complete=file_in_path
+    \ Grep cgetexpr system(&grepprg . ' ' . shellescape(<q-args>)) | cwindow
+
+command! -nargs=1 -complete=file_in_path
+    \ LGrep lgetexpr system(&grepprg . ' ' . shellescape(<q-args>)) | lwindow
+
+" }}}
+
+" ---------- Search and replace for given word
+function! SearchAndReplace(search, replace) abort "{{{
+    execute "silent grep!" a:search
+    execute "cdo s/" . a:search . "/" . a:replace . "/c"
+endfunction "}}}
+
+command! -nargs=+ -complete=file_in_path -bar
+    \ SearchAndReplace call SearchAndReplace(<f-args>)
+
+" Ultisnips ------------------------------- {{{
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+" }}}
+" }}}
+
+" Functions ----------- {{{
+let g:fluid_search_dirs = ['~/.vim', '~/.vim/after']
+
+function! GetSearchDirs() abort "{{{
+    if exists('g:fluid_search_dirs')
+        return g:fluid_search_dirs
+    else
+        return split(&runtimepath, ',')
+    endif
+endfunction "}}}    
+
+function! SortAfterFirst(file_matches) abort "{{{
+    let l:ordered_matches = []
+    for fmatch in a:file_matches
+        if l:fmatch =~ '.*after/ftplugins/.*'
+            call insert(l:ordered_matches, l:fmatch)
+        else
+            call add(l:ordered_matches, l:fmatch)
+        endif
+    endfor
+    return l:ordered_matches
+endfunction "}}}
+
+function! GetFiletypePlugins() abort "{{{
+    let l:curr_ft = split(&filetype, '\.')
+    let l:ft_dir = '/ftplugin/'
+    let l:runtime_dirs = GetSearchDirs()
+    let l:ftplugins = []
+    for ftype in l:curr_ft
+        let l:glob_patterns = [l:ftype . '/*',
+                    \ l:ftype . '.vim',
+                    \ l:ftype . '-*.vim']
+        for runtime_dir in l:runtime_dirs
+            echom l:ftype
+            for glob_pattern in l:glob_patterns
+                " Extends the list of ftplugins
+                call extend(l:ftplugins, glob(l:runtime_dir . l:ft_dir .
+                            \ l:glob_pattern, 0, 1))
+            endfor
+        endfor
+    endfor
+    return l:ftplugins
+endfunction "}}}
+
+function! ListorOpenFiletypePlugins(fileplugins) abort "{{{
+    if len(a:fileplugins) == 0
+        echom 'No filetype plugins found'
+    elseif len(a:fileplugins) == 1
+        if &hidden
+            execute 'edit ' . a:fileplugins[0]
+        else
+            execute 'split ' . a:fileplugins[0]
+        endif
+    else
+        let l:ordered_matches = SortAfterFirst(a:fileplugins)
+        call setqflist(map(l:ordered_matches, '{"filename": v:val}'))
+        copen
+    endif
+endfunction "}}}
+
+command! FluidOpenFtPlugins :call ListorOpenFiletypePlugins(
+            \ GetFiletypePlugins())
+"  }}}
+
+" General Mappings ------------------------ {{{
+
+" Leaders ------------------- {{{
+let maplocalleader =(" ")
+nnoremap <space> <nop>
+let mapleader = 's'
+nnoremap s <nop>
+" }}}
+
+" Movement based mappings ------------- {{{
+" Move lines up or down
+nnoremap _ ddkP
+nnoremap - ddp
+
+" Treat H as _ (go to first none space character)
+nnoremap H _
+
+" Moving around pages
+" Page down
+nnoremap zl Lzt
+" Page up
+nnoremap zh Hzb
+" }}}
+
+" Toggle search highlighing
+nnoremap <silent> <localleader>h :set hlsearch!<cr>
+
+" Add insert and visual mode mappings for quick all caps function
+" For word
+inoremap <c-u> <esc>viwU<esc>ea
+vnoremap <c-u> viwU<esc>e
+" For WORD
+inoremap <A-u> <esc>viWU<esc>Ea
+vnoremap <A-u> viWU<esc>E
+
+" Using my vimrc -------------------------- {{{
+nnoremap <silent> <leader>ed :e ~/.vimrc<cr>
+nnoremap <silent> <leader>sv :source ~/.vimrc<cr>
+" }}}
+
+" ------ Open filetype config files {{{
+nnoremap <silent> <leader>ef :FluidOpenFtPlugins<cr>
+nnoremap <silent> <leader>eu :UltiSnipsEdit<cr>
+"  }}}
+
+" Editing bash config files -------------- {{{
+nnoremap <silent> <leader>br :e ~/.bashrc<cr>
+nnoremap <silent> <leader>ba :e ~/.bash_aliases<cr>
+nnoremap <silent> <leader>bf :e ~/.bash_functions<cr>
+nnoremap <silent> <leader>bp :e ~/.bash_profile<cr>
+" }}}
+
+" Window, and Buffer Mappings ----------------------- {{{
+" Allowing for <leader> control of windows
+nnoremap <leader>w <c-w>
+
+" Buffer mappings
+nnoremap <silent> <tab> :bn<cr>
+nnoremap <silent> <s-tab> :bp<cr>
+nnoremap <silent> <leader>bd :bd<cr>
+" }}}
+
+" ---------- Opening Files {{{
+cnoremap %% <c-r>=fnameescape(expand('%:h')).'/'<cr>
+
+nmap <leader>en :edit %%
+nmap <leader>es :split %%
+nmap <leader>ev :vsplit %%
+nmap <leader>et :tabedit %%
+"  }}}
+
+" Grep mappings ------------------------ {{{
+nnoremap <leader>g :Grep <c-r>=expand('<cword>')<cr><cr>
+nnoremap <leader>G :Grep <c-r>=expand('<cWORD>')<cr><cr>
+" }}}
+
+" Search and Replace ------------------- {{{
+nnoremap <leader>r :SearchAndReplace <c-r>=expand('<cword>')<cr> 
+nnoremap <leader>R :SearchAndReplace <c-r>=expand('<cWORD>')<cr> 
+" }}}
+" }}}
+
+" Specific Mappings ----------------------- {{{
+" EasyAlign --------------------------- {{{
+xnoremap ga <Plug>(EasyAlign)
+nnoremap ga <Plug>(EasyAlign)
+
+" }}}
+
+" FZF ------------------------------------- {{{
+nnoremap <leader>t :FZF<cr>
+nnoremap <leader>T :FZF ~<cr>
+nmap <leader>h :FZF %%<cr>
+" }}}
+
+" ALE ------------------------------------- {{{
+nnoremap <silent> <leader>a :ALEFix<cr>
+nnoremap <silent> <leader>ne :ALENext -wrap<cr>
+nnoremap <silent> <leader>pe :ALEPrevious -wrap<cr>
+" }}}
+
+" Vim-fugitive ---------------------------- {{{
+nnoremap <localleader>G :Gstatus<cr>
+" }}}
+
+" --- vim-grammarous {{{
+if circumnavigate#isLocal()
+    nnoremap <leader>ll :GrammarousCheck<cr>
+    nnoremap <leader>ls :GrammarousReset<cr>
+    nmap <leader>lo <Plug>(gramarous-open-info-window)
+    nmap <leader>ln <Plug>(grammarous-move-to-next-error)<leader>lo
+    nmap <leader>lN <Plug>(grammarous-move-to-previous-error)<leader>lo
+    nmap <leader>lx <Plug>(grammarous-remove-error)
+    nmap <leader>lf <Plug>(grammarous-fixit)
+endif
+" }}}
+
+" }}}
+
+" Abbreviations ------------------ {{{
+" }}}
+
+" Wiki Specific ------------------------- {{{
+if circumnavigate#isLocal()
+    let wiki_1 = {'path': '~/wiki/personal/src/'}
+    let wiki_1.path_html = '~/wiki/personal/html'
+    let wiki_1.template_path = '~/wiki/personal/templates/'
+    let wiki_1.template_default = 'math_temp'
+
+    let wiki_2 = {'path': '~/wiki/research/src/'}
+    let wiki_2.path_html = '~/wiki/research/html/'
+    let wiki_2.template_path = '~/wiki/Research/templates/'
+    let wiki_2.template_default = 'math_temp'
+endif
+" }}}
+
+" Private configuration
+call private#SourceIfExists('~/.vim/private.vim')
