@@ -11,11 +11,10 @@ endfunction
 function! circumnavigate#exportSysEnv() abort
 	" Prevent errors if user did not set any hostname patterns
 	let l:hn = hostname()
-	let g:setup_dict = {'name': l:hn, 'local': v:false,
-				\ 'platform': s:WhichEnv()}
+	let g:setup_dict = {'name': l:hn, 'local': 0, 'platform': s:WhichEnv()}
         " Is local if ~/.vim/local exists
         if !empty(globpath('~/.vim', 'local'))
-            let g:setup_dict.local = v:true
+            let g:setup_dict.local = 1
         endif
 endfunction
 
