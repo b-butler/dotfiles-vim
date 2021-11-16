@@ -10,6 +10,6 @@ local
 # netrwhist
 .netrwhist
 # private configuration
-private.vim
+vim/private.vim
 # binary spell files
 *.spl
