@@ -102,7 +102,7 @@ if circumnavigate#isLocal()
 endif
 
 " Color Theme ----------------------------- {{{
-if has('termguicolors')
+if has('termguicolors') && circumnavigate#isLocal()
     set termguicolors
 else
     set t_Co=256
