@@ -1,13 +1,16 @@
 ACS
 ACS's
+adsorbates
 AMD
 antiparallel
 API
 Arabidopsis
 Arianna
+Auguste
 autoencoder
 autoencoders
 BCC
+BeCl
 Berend
 biorenewable
 Biorenewable
@@ -37,11 +40,14 @@ data
 Delaunay
 demixed
 demixing
+DFT
 dihedrals
 Discotic
 dodecagonal
 DOF
 DOF's
+dupin
+Dupin
 #ection/!
 electrospinned
 electrospinner
@@ -49,6 +55,8 @@ electrospinning
 electrospun
 etc
 F1
+Featurization
+Featurize
 Frenkel
 freud
 GCM
@@ -57,6 +65,7 @@ Github
 GitHub
 Glotzer
 Glotzer's
+GNUCash
 GoMC
 GPU
 GPU's
@@ -68,6 +77,7 @@ Hackathon's
 HCP
 heteronuclear
 Heteronuclear
+hoc
 homonuclear
 HOOMD
 HPC
@@ -86,10 +96,12 @@ JIT
 JSON
 kernelizable
 kernelize
+kneedle
 Komogrov
 Kotov
 Kullback
 Kuperberg
+LaCour
 LAMMPS
 Langevin
 Laplacian
@@ -116,6 +128,7 @@ micelle
 microcanonical
 microstate
 microstates
+Mie
 Minkowski
 MoISSI
 MolSSI
@@ -124,6 +137,8 @@ MoSDeF
 motified
 MPI
 MSE
+MSM
+MSM's
 MSU
 MSU's
 mutagenesis
@@ -146,6 +161,7 @@ OpenMM
 orientational
 OVITO
 parabidiminished
+PCA
 PEL
 performant
 photonic
@@ -162,6 +178,7 @@ Quasicrystal
 quasicrystals
 Rademacher
 Ramasubramani
+RDF
 refactor
 refactored
 reify
@@ -174,6 +191,7 @@ rhombicosidodecahedron
 RNN
 RNNs
 Rosenbluth
+Sangmin
 scikit
 SciPy
 section
@@ -181,6 +199,7 @@ section/!
 SHPE
 signac
 signac's
+simulationist
 Smectic
 Smit
 Sofea
@@ -201,7 +220,10 @@ TensorFlow
 Thermotropic
 Thi
 timestep
+translationally
 TRUEness
+UMAP
+unaveraged
 undifferentiation
 Unimodular
 unrounded
@@ -213,13 +235,9 @@ Voronoi
 Vyas
 wavefunction
 wavefunctions
+WCA
 workflow
 workflows
 Xplore
 Yue
 Ziv
-Featurization
-translationally
-Featurize
-adsorbates
-DFT
