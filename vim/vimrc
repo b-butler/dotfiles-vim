@@ -377,8 +377,8 @@ inoremap <A-u> <esc>viWU<esc>Ea
 vnoremap <A-u> viWU<esc>E
 
 " Using my vimrc -------------------------- {{{
-nnoremap <silent> <leader>ed :e ~/.vimrc<cr>
-nnoremap <silent> <leader>sv :source ~/.vimrc<cr>
+nnoremap <silent> <leader>co :e ~/.vim/vimrc<cr>
+nnoremap <silent> <leader>cs :source ~/.vim/vimrc<cr>
 " }}}
 
 " ------ Open filetype config files {{{
