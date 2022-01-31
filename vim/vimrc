@@ -245,7 +245,6 @@ endif
 " Vimtex Settings ------------------------- {{{
 let g:tex_flavor='latex'
 let g:tex_conceal='abmgs'
-let g:vimtex_latexmk_continuous=1
 let g:vimtex_fold_enabled=1
 let g:vimtex_imaps_leader=';'
 let g:vimtex_compiler_latexmk = {'options' : ['-verbose', '-file-line-error']}
