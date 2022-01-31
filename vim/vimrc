@@ -150,7 +150,7 @@ if has('nvim')
     " lua config file called from .vimrc.
     lua << EOF
     require'nvim-treesitter.configs'.setup {
-        indent = { enable = true },
+        indent = { enable = true, disable = { "python" }},
         incremental_selection = {
             enable = true,
             keymaps = {
