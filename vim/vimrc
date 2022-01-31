@@ -432,9 +432,9 @@ nnoremap ga <Plug>(EasyAlign)
 " }}}
 
 " FZF ------------------------------------- {{{
-nnoremap <leader>t :FZF<cr>
-nnoremap <leader>T :FZF ~<cr>
-nmap <leader>h :FZF %%<cr>
+nnoremap <leader>sp :FZF<cr>
+nnoremap <leader>sg :FZF ~<cr>
+nmap <leader>sh :FZF %%<cr>
 " }}}
 
 " ALE ------------------------------------- {{{
