@@ -32,6 +32,7 @@ symlink-with-warning vim "${HOME}/.vim" || echo "Vim config installation failed.
 
 plugin_error_msg="Could not properly install plugins via VimPlug."
 if [ command -v nvim ]; then
+    symlink-with-warning nvim/init.vim "${HOME}/.config/nvim/" || echo "Neovim init.vim installation failed." && exit 1
     nvim -s setup.vim || echo "$plugin_error_msg" && exit 1
 else
     vim -s setup.vim || echo "$plugin_error_msg" && exit 1
