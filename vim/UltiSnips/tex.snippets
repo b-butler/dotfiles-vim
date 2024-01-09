@@ -32,13 +32,13 @@ endsnippet
 priority 0
 # Snippets for the interior of the body
 # lists
-snippet itemize "start an unnumbered list" bA
+snippet itemize "start an unnumbered list" b
 \begin{itemize}
 	\item $0
 \end{itemize}
 endsnippet
 
-snippet enum "begin a numbered list" bA
+snippet enum "begin a numbered list" b
 \begin{enumerate}${1:[$2]}
 	\item $0
 \end{enumerate}
@@ -62,7 +62,7 @@ ${3:\label{sec:$2}}
 $0
 endsnippet
 
-snippet sec "simple section" bA
+snippet sec "simple section" b
 \section{${1:Section Name}}%
 ${2:\label{sec:$3}}
 $0
@@ -85,4 +85,21 @@ endsnippet
 
 snippet tlc "italics text" wA
 \textit{$1}$0
+endsnippet
+
+snippet ref "reference" i
+~\ref{${1:label}}$0
+endsnippet
+
+priority 1
+snippet fref "figure reference" i
+Figure~\ref{fig:{$1:label}}$0
+endsnippet
+
+snippet sref "section reference" i
+Section~\ref{sec:{$1:label}}$0
+endsnippet
+
+snippet aref "appendix reference" i
+Appendix~\ref{sec:{$1:label}}$0
 endsnippet
