@@ -27,6 +27,8 @@ if has('nvim')
     Plug 'quangnguyen30192/cmp-nvim-ultisnips'
     Plug 'hrsh7th/cmp-nvim-lsp'
     Plug 'hrsh7th/cmp-buffer'
+    " Neovim exclusive colorschemes
+    Plug 'rebelot/kanagawa.nvim'
 endif
 " ---------- All Environments Plugins {{{
 " Aligning for text documents
@@ -111,6 +113,7 @@ set background=dark
 
 " Change the syntax highlight to desired package.
 let colorscheme_choice = "papercolor"  " choices include gruvbox, papercolor
+let colorscheme_choice = "kanagawa"  " choices include gruvbox, papercolor
 if colorscheme_choice == "papercolor"
     let g:PaperColor_Theme_Options = {
     \   'theme': {
@@ -126,6 +129,8 @@ elseif colorscheme_choice == "gruvbox"
     let g:gruvbox_italic = 1
     let g:gruvbox_transparent_bg = 1
     colorscheme gruvbox
+elseif colorscheme_choice == "kanagawa"
+    colorscheme kanagawa
 endif
 " }}}
 
