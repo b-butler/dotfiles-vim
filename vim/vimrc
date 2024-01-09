@@ -295,7 +295,7 @@ if has('nvim')
 
 EOF
 endif
-"
+" }}}
 
 " Vimtex Settings ------------------------- {{{
 let g:tex_flavor='latex'
