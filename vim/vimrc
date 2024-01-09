@@ -75,6 +75,8 @@ Plug 'editorconfig/editorconfig-vim'
 " Pretty table support
 Plug 'dhruvasagar/vim-table-mode'
 
+" CMake commands for Vim which populate QuickFix list
+Plug 'cdelledonne/vim-cmake'
 "  }}}
 " Initialize plugin system
 call plug#end()
