@@ -32,6 +32,8 @@ if has('nvim')
     Plug 'hrsh7th/cmp-cmdline'
     Plug 'hrsh7th/cmp-path'
     " LSP/other plugin manager (external packages)
+    Plug 'williamboman/mason.nvim'
+    Plug 'williamboman/mason-lspconfig.nvim'
     " distraction free writing tools
     Plug 'folke/zen-mode.nvim'
     Plug 'folke/twilight.nvim'
@@ -192,6 +194,11 @@ endif
 " NVim-LSP Config settings ---- {{{
 if has('nvim')
     lua << EOF
+    -- Must setup mason before nvim lsp and presumably cmp-lsp
+    require("mason").setup()
+    require("mason-lspconfig").setup {
+    ensure_installed = { "ltex" },
+    }
     -- Setup nvim-cmp.
     local cmp = require'cmp'
 
@@ -277,7 +284,7 @@ if has('nvim')
     end
 
     -- Set up individual servers
-    servers = { 'clangd', 'cmake', 'bashls', 'jedi_language_server' }
+    servers = { 'clangd', 'cmake', 'bashls', 'jedi_language_server', 'texlab', "ltex"}
 
     for _, lsp in ipairs(servers) do
         nvim_lsp[lsp].setup {
