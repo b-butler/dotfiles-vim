@@ -1,0 +1,64 @@
+snippet vec
+std::vector<$1>
+endsnippet
+
+snippet pair
+std::pair<$1, $2>
+endsnippet
+
+snippet fori "for loop with i index" A
+for (size_t i{0}; i < $1; ++i) {
+	$0
+}
+endsnippet
+
+snippet forj "for loop with j index" A
+for (size_t j{0}; j < $1; ++j) {
+	$0
+}
+endsnippet
+
+snippet fork "for loop with k index" 
+for (size_t k{0}; k < $1; ++k) {
+	$0
+}
+endsnippet
+
+snippet forx "for loop with user specified index" A
+for (size_t ${1:x}{0}; i < $2; ++i) {
+	$0
+}
+endsnippet
+
+snippet std "std namespace" A
+std::
+endsnippet
+
+snippet dox "Doxygen comment"
+/**
+ * $0
+ */
+endsnippet
+
+snippet nspace "Enter namespace"
+namespace ${1:name} {
+${0:declaration}
+} // End namespace $1
+endsnippet
+
+snippet scast "static cast"
+static_cast<${1:type}>(${2:value})
+endsnippet
+
+snippet gtr "Getter declaration"
+${1:type} get${2:member}() ${3:const};
+endsnippet
+
+snippet str "Setter declaration"
+void get${2:member}(${1:type} ${3:arg});
+endsnippet
+
+snippet gstr "Getter and setter declaration"
+${1:type} get${2:member}() ${3:const};
+void set$2($1 ${3:arg});
+endsnippet
