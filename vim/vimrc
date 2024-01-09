@@ -19,6 +19,7 @@ if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate all'}
     " We now install a helper plugin for the built in LSP for Neovim
     Plug 'neovim/nvim-lspconfig'
+    Plug 'LhKipp/nvim-nu', {'do': ':TSInstall nu'}
     " We use nvim-cmp a completion engine written in Lua that is highly
     " configuratble and fast (as can be for a completion engine. This also
     " supports the LSP built into Neovim 0.5 and greater.
@@ -173,6 +174,7 @@ if has('nvim')
         enable = true,
         }
     }
+    require('nu').setup{}
 EOF
 
     set foldmethod=expr
